@@ -1,7 +1,5 @@
 from typing import List
 from openai import OpenAI
-import requests
-import json
 
 client = OpenAI()
 
@@ -42,30 +40,6 @@ def generate_text_openai(prompt: str) -> str:
     except Exception as e:
         print("Error calling OpenAI: ", str(e))
         return "Error"
-
-def generate_text_ollama(prompt: str) -> str:
-    url = "http://localhost:11434/api/generate"
-    payload = {
-        "prompt": prompt,
-        "model": "llama3.2",
-        "temperature": 0.7,
-        "max_tokens": 256
-    }
-
-    response = requests.post(url, json=payload)
-    response.raise_for_status()
-    
-    result_text = ""
-    for line in response.iter_lines(decode_unicode=True):
-        if line.strip():
-            try:
-                json_data = json.loads(line)
-                if "response" in json_data:
-                    result_text += json_data["response"]
-            except json.JSONDecodeError:
-                pass
-
-    return result_text.strip()
 
 def print_statements(statements: List[str]):
     for i, statement in enumerate(statements):
