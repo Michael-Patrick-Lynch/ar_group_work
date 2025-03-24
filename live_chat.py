@@ -28,7 +28,7 @@ class LiveChat(commands.Bot):
 
         if live_chat_message not in self.messages:
             self.messages.append(live_chat_message)
-            print(f"{live_chat_message.username}: {live_chat_message.body}")
+            print(f"{live_chat_message.timestamp} - {live_chat_message.username}: {live_chat_message.body}")
 
     def most_recent_message(self):
         return self.messages[-1] if self.messages else None
