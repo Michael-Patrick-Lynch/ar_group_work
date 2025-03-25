@@ -3,11 +3,23 @@ from openai import OpenAI
 
 client = OpenAI()
 
-def generate_next_statement(developer_prompt, context):
+def generate_next_statement(developer_prompt, context, livechat_messages):
     try:
-        messages = construct_messages_parameter(developer_prompt, "give the next statement", context[len(context) - 5:])
+        chat_content = ""
+        if livechat_messages:
+            chat_content = "\nRespond to these all of these new chat messages:\n" + "\n".join(
+                f"{msg.username}: {msg.body}" for msg in livechat_messages
+            )
+        
+        messages = construct_messages_parameter(
+            developer_prompt=developer_prompt,
+            user_prompt=f"Continue the story naturally with a 1-2 sentence statement.{chat_content}",
+            context=context[len(context) - 5:]
+        )
+
+
         ChatCompletionObject = client.chat.completions.create(
-        model="gpt-4.5-preview-2025-02-27",
+        model="gpt-4o-mini",
         messages=messages
         )
         
@@ -21,17 +33,17 @@ def construct_messages_parameter(developer_prompt:str = None,
                                 context: List[str] = None):
     messages = []
     if developer_prompt:
-        messages.append({"role": "developer", "content": developer_prompt})
+        messages.append({"role": "system", "content": developer_prompt})
     if user_prompt:
         messages.append({"role": "user", "content": user_prompt})
     for message in context:
-        messages.append({"role": "assistant", "content": [{ "type": "text", "text": message }]})
+        messages.append({"role": "assistant", "content": message})
     return messages
 
 def generate_text_openai(prompt: str) -> str:
     try:
         ChatCompletionObject = client.chat.completions.create(
-        model="gpt-4.5-preview-2025-02-27",
+        model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": f"{prompt}"},
         ]

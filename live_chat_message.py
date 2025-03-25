@@ -3,3 +3,6 @@ class LiveChatMessage:
         self.username = username
         self.body = body
         self.timestamp = timestamp
+    
+    def __str__(self):
+        return f"{self.timestamp} - {self.username}: {self.body}"

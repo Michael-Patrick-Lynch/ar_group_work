@@ -13,13 +13,17 @@ class Prompt:
 
         # Style guidlines
         self.add_instruction("- **Avoid generic phrases or clichés.** No 'you ever wonder...?' or 'I trust you guys... but not really.'")
-        self.add_instruction("- **Speak as if reacting to a real situation.** If there’s no chat, make up a memory, an event, or a fake past mistake.")
+        self.add_instruction("- **Speak as if reacting to a real situation.** If there's no chat, make up a memory, an event, or a fake past mistake.")
         self.add_instruction("- **No food talk. No obvious 'trying to be relatable.'** Just share feelings, thoughts, and fun ideas.")
         self.add_instruction("Don't make it completly outlandish and nonesensical, it should be funny but believable")
 
         # Content
         self.add_instruction("Tell a story about your trip to Rome, and a funny incident that happened while you were there.")
-        
+
+        # Instructions about live chat
+        self.add_instruction("When chat messages appear, respond to them naturally while continuing your story.")
+        self.add_instruction("Weave chat responses smoothly into your narrative without breaking character or disrupting the flow.")
+        self.add_instruction("Do not leave any chat messages unresponded to!")
 
     def add_instruction(self, instruction: str):
         self.body += instruction
