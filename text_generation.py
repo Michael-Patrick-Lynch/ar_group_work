@@ -7,7 +7,7 @@ def generate_next_statement(developer_prompt, context):
     try:
         messages = construct_messages_parameter(developer_prompt, "give the next statement", context[len(context) - 5:])
         ChatCompletionObject = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-4.5-preview-2025-02-27",
         messages=messages
         )
         
@@ -31,7 +31,7 @@ def construct_messages_parameter(developer_prompt:str = None,
 def generate_text_openai(prompt: str) -> str:
     try:
         ChatCompletionObject = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-4.5-preview-2025-02-27",
         messages=[
             {"role": "system", "content": f"{prompt}"},
         ]
