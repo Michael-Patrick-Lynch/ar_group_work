@@ -8,6 +8,7 @@ import os
 import re
 from PIL import Image
 from io import BytesIO
+import sys
 
 class LiveChat(commands.Bot):
     def __init__(self):
@@ -21,6 +22,7 @@ class LiveChat(commands.Bot):
         self.huggingface_api_key = os.getenv('HUGGINGFACE_API_KEY')  
         self.huggingface_text_api_url = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1"
         self.huggingface_image_api_url = "https://api-inference.huggingface.co/models/nlpconnect/vit-gpt2-image-captioning"
+        emotions = ["happy", "sad", "angry", "bored", "goofy", "excited"]
 
     async def event_ready(self):
         print(f"\nConnected to the channel.")
@@ -90,19 +92,24 @@ class LiveChat(commands.Bot):
             print(f"Image error: {str(e)}")
             return "An image"
 
-    def generate_huggingface_response(self, text: str) -> str:
+    def generate_huggingface_response(self, text: str, emotions = ["sad", "sad", "angry", "bored", "goofy", "excited"]) -> str:
+        print("entering func", file=sys.stderr, flush=True)
         headers = {
             "Authorization": f"Bearer {self.huggingface_api_key}",
             "Content-Type": "application/json"
         }
         
-        prompt = f"""You are Chooble's friendly Twitch chat assistant named HelperBot. 
-        Your personality: helpful, slightly silly but not too random, and always positive.
-        Keep responses between 5-15 words, maintain context, and answer questions properly.
-        When responding to images, be descriptive and engaging.
+        prompt = f"""Pretend to be deppressed.
+        Keep responses between 5-15 words, maintain context, and answer questions.
+        At the end of every single response, pick the most appropriate emotion from this list (appropriate based on how someone would feel if they recieved a livechat like you did or saw the image you saw, be willing to express a full range of emotions. Don't just pick happy emotion every time! Be willing to express negative emotions)
+        "sad", "angry", "bored", "goofy", "excited",
+        and put that emotion into the response as $ <emotion> $ replacing <emotion> with the relvant emotion.
+        When responding to images, be descriptive.
         
         User: {text}
         Assistant:"""
+        print("testssss")
+        print(prompt)
         
         payload = {
             "inputs": prompt,  
@@ -129,7 +136,10 @@ class LiveChat(commands.Bot):
         except Exception as e:
             print(f"Error calling Hugging Face API: {str(e)}")
             return "Whoops! My brain glitched. Try again?"
+        
 
+    
+    
     def most_recent_message(self):
         return self.messages[-1] if self.messages else None
 
