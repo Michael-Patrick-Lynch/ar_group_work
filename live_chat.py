@@ -58,20 +58,20 @@ class LiveChat(commands.Bot):
                         f"Respond to this image description in a friendly, chatty way as a Twitch bot without using any emojis: {caption}"
                     )
                     response_text = f"[AI] {friendly_response} [{detected_emotion}]"
-                    await message.channel.send(response_text)
+                    #await message.channel.send(response_text)
                     
                     self.save_response_files(friendly_response, detected_emotion)
                     
                 except Exception as e:
                     print(f"Error processing image: {str(e)}")
                     error_text = f"[AI] I saw an image but couldn't understand it! [{detected_emotion}]"
-                    await message.channel.send(error_text)
+                    #await message.channel.send(error_text)
                     
                     self.save_response_files("I saw an image but couldn't understand it!", detected_emotion)
             else:
                 response = self.generate_huggingface_response(message.content)
                 response_text = f"[AI] {response} [{detected_emotion}]"
-                await message.channel.send(response_text)
+                #await message.channel.send(response_text)
                 
                 self.save_response_files(response, detected_emotion)
 
@@ -120,11 +120,11 @@ class LiveChat(commands.Bot):
             
             result = response.json()
             emotion = result[0]['generated_text'].strip().lower()
-            return emotion if emotion in self.possible_emotions else "happy"
+            return emotion if emotion in self.possible_emotions else "excited"
             
         except Exception as e:
             print(f"Error detecting emotion: {str(e)}")
-            return "happy"
+            return "excited"
 
     def extract_image_urls(self, text: str) -> List[str]:
         url_pattern = r'(https?:\/\/[^\s]+\.(?:jpg|jpeg|png|gif|webp))'
